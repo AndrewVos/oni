@@ -6,13 +6,13 @@ Feature: Application
   Scenario: Most basic application
     Given I have the Oni application:
     """
-    Oni.root :home
-
     class HomeController
       def get
         "Hello World!"
       end
     end
+
+    Oni::Application.route "/", HomeController
     """
     When I visit "/"
     Then I should see "Hello World!"

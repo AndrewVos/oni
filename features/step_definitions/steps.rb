@@ -1,12 +1,13 @@
 require "tempfile"
 
-Capybara::app = Oni::Application
+Capybara::app = Oni::Application.new
+
+Before do
+  Oni::Application.reset_routes!
+end
 
 Given /^I have the Oni application:$/ do |contents|
-  path = Tempfile.new("application").path
-  File.open(path, "w") do |file|
-    file.write(contents)
-  end
+  eval contents
 end
 
 When /^I visit "([^"]*)"$/ do |path|
