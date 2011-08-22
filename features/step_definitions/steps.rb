@@ -3,7 +3,7 @@ require "tempfile"
 Capybara::app = Oni::Application.new
 
 Before do
-  Oni::Application.reset_routes!
+  Oni::Routes.reset_routes!
 end
 
 Given /^I have the Oni application:$/ do |contents|

@@ -3,16 +3,16 @@ Feature: Application
   As a developer
   I want to be able to create web applications easily
 
-  Scenario: Most basic application
+  Scenario: Application that responds to get requests
     Given I have the Oni application:
     """
-    class HomeController
+    class HomeController < Oni::Controller
       def get
         "Hello World!"
       end
     end
 
-    Oni::Application.route "/", HomeController
+    Oni::Routes.route "/", HomeController
     """
     When I visit "/"
     Then I should see "Hello World!"

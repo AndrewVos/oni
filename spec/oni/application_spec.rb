@@ -1,5 +1,4 @@
 require "spec_helper"
-require "oni/application"
 
 class ExampleController
 end
@@ -7,40 +6,53 @@ end
 module Oni
   describe Application do
     before do
-      Application.reset_routes!
+      Oni::Routes.reset_routes!
     end
 
     let :application do
       Application.new
     end
 
-    let :browser do
-      Rack::Test::Session.new(Rack::MockSession.new(application))
+    describe ".call" do
+      it "passes a request on to the process method" do
+        env = {"PATH_INFO" => "/"}
+        request = mock(:request)
+        Rack::Request.should_receive(:new).with(env).and_return(request)
+        application.should_receive(:process).with(request)
+        application.call(env)
+      end
+
+      it "returns the response of the process method" do
+        application.stub!(:process).and_return "process result"
+        application.call({}).should == "process result"
+      end
     end
 
-    it "stores a list of routes" do
-      Application.route :hello, "hello route!"
-      Application.route :goodbye, "goodbye route!"
-      Application.routes.should == {:hello => "hello route!", :goodbye => "goodbye route!"}
-    end
+    describe ".process" do
+      context "matches a controller" do
+        it "forwards a request on to the first matched controller" do
+          request = mock(:request)
+          Rack::Request.stub!(:new).and_return(request)
+          controller = mock(:controller)
+          Routes.stub!(:match).and_return(controller)
+          controller.should_receive(:process).with(request)
+          application.process(request)
+        end
 
-    it "resets routes" do
-      Application.route :hello, "the route"
-      Application.reset_routes!
-      Application.routes.should == {}
-    end
+        it "returns the response of the controller" do
+          controller = mock(:controller)
+          controller.stub!(:process).and_return("controller response")
+          Routes.stub!(:match).and_return(controller)
+          application.process("hello").should == "controller response"
+        end
+      end
 
-    it "maps simple routes to controllers" do
-      Application.route "/", ExampleController
-      controller = ExampleController.new
-      ExampleController.stub!(:new).and_return(controller)
-      controller.should_receive(:get)
-      browser.get "/"
-    end
-
-    it "404s if there is no matching controller" do
-      browser.get "/doesn't-exist"
-      browser.last_response.should be_not_found
+      context "doesn't match a controller" do
+        it "404s if there is no matching controller" do
+          request = mock(:request)
+          application.process(request).status.should == 404
+        end
+      end
     end
   end
 end
