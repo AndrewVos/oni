@@ -19,6 +19,12 @@ module Oni
           parameter_names = from.scan(/:(\w+)/)
           request_path_parts = request.path.scan(/\/(\w+)/)
           if parameter_names.size == request_path_parts.size
+            parameter_names.flatten!
+            parameter_names.map!(&:to_sym)
+            new_parameters = Hash[*parameter_names.zip(request_path_parts).flatten]
+            new_parameters.each do |key, value|
+              request.params[key] = value
+            end
             return to.new
           end
         end

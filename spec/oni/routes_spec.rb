@@ -8,6 +8,8 @@ module Oni
     def mock_request path
       request = mock(:request)
       request.stub!(:path).and_return(path)
+      params = mock(:params).as_null_object
+      request.stub!(:params).and_return(params)
       request
     end
 
@@ -37,6 +39,16 @@ module Oni
       Oni::Routes.route "/:parameter1/:parameter2", ParameterController
       ParameterController.stub!(:new).and_return "parameter controller"
       Oni::Routes.match(mock_request("/value1/value2")).should == "parameter controller"
+    end
+
+    it "adds the request parameters to the request" do
+      Oni::Routes.route "/:parameter1/:parameter2", ParameterController
+      request = mock_request("/value1/value2")
+      params = mock(:params)
+      request.stub!(:params).and_return(params)
+      params.should_receive(:[]=).with(:parameter1, "value1")
+      params.should_receive(:[]=).with(:parameter2, "value2")
+      Oni::Routes.match(request)
     end
   end
 end

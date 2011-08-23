@@ -17,3 +17,10 @@ end
 Then /^I should see "([^"]*)"$/ do |text|
   page.body.should include text
 end
+
+Given /^I have the route "([^"]*)"$/ do |route|
+end
+
+Given /^I have the route "([^"]*)" to the controller "([^"]*)"$/ do |from, to|
+  Oni::Routes.route from, Kernel.const_get(to)
+end
