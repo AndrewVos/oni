@@ -2,8 +2,6 @@ require "spec_helper"
 
 module Oni
   describe StringRouteMatcher do
-    subject {StringRouteMatcher.new}
-
     let :request do
       request = mock(:request)
       request.stub!(:path)
@@ -17,38 +15,38 @@ module Oni
       params
     end
 
-    it "matches simple routes" do
-      request.stub!(:path).and_return("/")
-      subject.match?("/", request).should == true
+    context "simple routes" do
+      subject {StringRouteMatcher.new("/", request)}
+
+      it "matches simple routes" do
+        request.stub!(:path).and_return("/")
+        subject.match?.should == true
+      end
     end
 
-    it "doesn't match routes that are different" do
-      request.stub!(:path).and_return("/")
-      subject.match?("/blabla", request).should == false
+    context "different routes" do
+      subject {StringRouteMatcher.new("/blabla", request)}
+
+      it "doesn't match routes that are different" do
+        request.stub!(:path).and_return("/")
+        subject.match?.should == false
+      end
     end
 
-    it "matches routes with parameters" do
-      request.stub!(:path).and_return("/value1/ignore/value2/another")
-      subject.match?("/:param1/ignore/:param2/another", request).should == true
-    end
+    context "routes with parameters" do
+      subject {StringRouteMatcher.new("/:param1/ignore/:param2/another", request)}
 
-    it "adds the matched parameters to the request" do
-      request.stub!(:path).and_return("/value1/ignore/value2/another")
-      params.should_receive(:[]=).with(:param1, "value1")
-      params.should_receive(:[]=).with(:param2, "value2")
-      subject.match?("/:param1/ignore/:param2/another", request)
+      it "matches routes with parameters" do
+        request.stub!(:path).and_return("/value1/ignore/value2/another")
+        subject.match?.should == true
+      end
+
+      it "adds the matched parameters to the request" do
+        request.stub!(:path).and_return("/value1/ignore/value2/another")
+        params.should_receive(:[]=).with(:param1, "value1")
+        params.should_receive(:[]=).with(:param2, "value2")
+        subject.match?
+      end
     end
   end
 end
-    #context "route with parameters" do
-      #before do
-        #subject.route "/:parameter1/:parameter2", TestController
-        #request.stub!(:path).and_return("/value1/value2")
-      #end
-
-      #it "matches routes with parameters" do
-        #controller.should_receive(:process).with(request)
-        #subject.match(request)
-      #end
-
-    #end

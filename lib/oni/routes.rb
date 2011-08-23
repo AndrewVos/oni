@@ -16,7 +16,7 @@ module Oni
 
       def match request
         routes.each do |from, to|
-          if StringRouteMatcher.new.match?(from, request)
+          if StringRouteMatcher.new(from, request).match?
             return to.new.process(request)
           end
         end

@@ -1,28 +1,36 @@
 module Oni
   class StringRouteMatcher
-    def match? route, request
-      route_parts = route.split("/")
-      request_parts = request.path.split("/")
-      if route_parts.size == request_parts.size
-        parameters = {}
-        all_parts_match = true
-        0.upto(route_parts.size-1) do |index|
-          if route_parts[index] =~ /:\w+/
-            parameters[route_parts[index]] = request_parts[index]
-          elsif route_parts[index] == request_parts[index]
-          else
-            all_parts_match = false
-          end
-        end
-        if all_parts_match
-          parameters.each do |key, value|
-            request.params[key.gsub(":", "").to_sym] = value
-          end
-          return true
+    def initialize route, request
+      @route = route
+      @request = request
+    end
+
+    def match?
+      route_parts = @route.split("/")
+      request_parts = @request.path.split("/")
+      0.upto(route_parts.size-1).map do |index|
+        unless route_parts[index].start_with? ':'
+          return false if route_parts[index] != request_parts[index]
         end
       end
+      rip_parameters(route_parts, request_parts).each do |key, value|
+        @request.params[key] = value
+      end
 
-      return route == request.path
+      true
+    end
+
+    private
+
+    def rip_parameters route_parts, request_parts
+      parameters = {}
+      0.upto(route_parts.size-1) do |index|
+        if route_parts[index].start_with? ':'
+          symbol = route_parts[index].gsub(':', '').to_sym
+          parameters[symbol] = request_parts[index]
+        end
+      end
+      parameters
     end
   end
 end

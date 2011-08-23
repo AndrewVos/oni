@@ -40,9 +40,6 @@ module Oni
       subject.match(request).status.should == 404
     end
 
-    class StringRouteMatcher
-    end
-
     before do
       StringRouteMatcher.stub!(:new).and_return(string_route_matcher)
     end
@@ -58,11 +55,17 @@ module Oni
         request.stub!(:path).and_return("/")
       end
 
+      it "creates a route matcher" do
+        subject.route "/route1", TestController
+        StringRouteMatcher.should_receive(:new).with("/route1", request)
+        subject.match(request)
+      end
+
       it "passes each path with the request to the route matcher" do
         subject.route "/hello", TestController
         subject.route "/goodbye", TestController
-        string_route_matcher.should_receive(:match?).with("/hello", request)
-        string_route_matcher.should_receive(:match?).with("/goodbye", request)
+        StringRouteMatcher.should_receive(:new).with("/hello", request)
+        StringRouteMatcher.should_receive(:new).with("/goodbye", request)
         subject.match(request)
       end
 
