@@ -18,12 +18,12 @@ module Oni
         env = {"PATH_INFO" => "/"}
         request = mock(:request)
         Rack::Request.should_receive(:new).with(env).and_return(request)
-        Oni::Routes.should_receive(:match).with(request)
+        Oni::Routes.should_receive(:process).with(request)
         application.call(env)
       end
 
       it "returns the response of the routes" do
-        Oni::Routes.stub!(:match).and_return "routes result"
+        Oni::Routes.stub!(:process).and_return "routes result"
         application.call({}).should == "routes result"
       end
     end

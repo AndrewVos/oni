@@ -5,7 +5,7 @@ module Oni
     end
 
     def process request
-      Routes.match(request)
+      Routes.process(request)
     end
   end
 end
