@@ -1,16 +1,27 @@
 require "spec_helper"
 
 module Oni
-  class SimpleController; end
-  class ParameterController; end
+  class TestController; end
 
   describe Routes do
-    def mock_request path
+    subject { Oni::Routes }
+
+    before do
+      TestController.stub!(:new).and_return(controller)
+    end
+
+    let :request do
       request = mock(:request)
-      request.stub!(:path).and_return(path)
+      request.stub!(:path)
       params = mock(:params).as_null_object
       request.stub!(:params).and_return(params)
       request
+    end
+
+    let :controller do
+      controller = mock(:controller)
+      controller.stub!(:process)
+      controller
     end
 
     it "stores a list of routes" do
@@ -25,30 +36,47 @@ module Oni
       Oni::Routes.routes.should == {}
     end
 
-    it "returns nil of the route doesn't get matched" do
-      Oni::Routes.match(mock_request("why hello there")).should == nil
+    it "404s if the route doesn't get matched" do
+      subject.match(request).status.should == 404
     end
 
-    it "matches simple routes do" do
-      Oni::Routes.route "/", SimpleController
-      SimpleController.stub!(:new).and_return "simple controller"
-      Oni::Routes.match(mock_request("/")).should == "simple controller"
+    class StringRouteMatcher
     end
 
-    it "matches routes with parameters" do
-      Oni::Routes.route "/:parameter1/:parameter2", ParameterController
-      ParameterController.stub!(:new).and_return "parameter controller"
-      Oni::Routes.match(mock_request("/value1/value2")).should == "parameter controller"
+    before do
+      StringRouteMatcher.stub!(:new).and_return(string_route_matcher)
     end
 
-    it "adds the request parameters to the request" do
-      Oni::Routes.route "/:parameter1/:parameter2", ParameterController
-      request = mock_request("/value1/value2")
-      params = mock(:params)
-      request.stub!(:params).and_return(params)
-      params.should_receive(:[]=).with(:parameter1, "value1")
-      params.should_receive(:[]=).with(:parameter2, "value2")
-      Oni::Routes.match(request)
+    let :string_route_matcher do
+      string_route_matcher = stub(:string_route_matcher)
+      string_route_matcher.stub!(:match?).and_return(false)
+      string_route_matcher
+    end
+
+    describe ".match" do
+      before do
+        request.stub!(:path).and_return("/")
+      end
+
+      it "passes each path with the request to the route matcher" do
+        subject.route "/hello", TestController
+        subject.route "/goodbye", TestController
+        string_route_matcher.should_receive(:match?).with("/hello", request)
+        string_route_matcher.should_receive(:match?).with("/goodbye", request)
+        subject.match(request)
+      end
+
+      it "passes the request on to the controller" do
+        string_route_matcher.should_receive(:match?).and_return(true)
+        controller.should_receive(:process).with(request)
+        subject.match(request)
+      end
+
+      it "returns the response from the controller" do
+        string_route_matcher.should_receive(:match?).and_return(true)
+        controller.stub!(:process).and_return("controller response")
+        subject.match(request).should == "controller response"
+      end
     end
   end
 end

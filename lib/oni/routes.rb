@@ -16,19 +16,11 @@ module Oni
 
       def match request
         routes.each do |from, to|
-          parameter_names = from.scan(/:(\w+)/)
-          request_path_parts = request.path.scan(/\/(\w+)/)
-          if parameter_names.size == request_path_parts.size
-            parameter_names.flatten!
-            parameter_names.map!(&:to_sym)
-            new_parameters = Hash[*parameter_names.zip(request_path_parts).flatten]
-            new_parameters.each do |key, value|
-              request.params[key] = value
-            end
-            return to.new
+          if StringRouteMatcher.new.match?(from, request)
+            return to.new.process(request)
           end
         end
-        nil
+        Rack::Response.new([], 404)
       end
     end
   end

@@ -5,12 +5,7 @@ module Oni
     end
 
     def process request
-      controller = Routes.match(request)
-      if controller
-        controller.process(request)
-      else
-        Rack::Response.new([], 404)
-      end
+      Routes.match(request)
     end
   end
 end
