@@ -24,3 +24,7 @@ end
 Given /^I have the route "([^"]*)" to the controller "([^"]*)"$/ do |from, to|
   Oni::Routes.route from, Kernel.const_get(to)
 end
+
+Then /^I should see a (\d+) status code$/ do |code|
+  page.status_code.should == code.to_i
+end
