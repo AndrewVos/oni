@@ -7,7 +7,6 @@ Feature:
     When I visit "/unmatched-route"
     Then I should see a 404 status code
 
-
   Scenario: Simple route
     Given I have the Oni controller:
     """
