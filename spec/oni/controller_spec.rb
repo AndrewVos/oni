@@ -34,6 +34,12 @@ module Oni
         subject.process(request)
         subject.params.should == request.params
       end
+
+      it "exposes the request" do
+        subject.stub!(:get)
+        subject.process(request)
+        subject.request.should == request
+      end
     end
   end
 end
