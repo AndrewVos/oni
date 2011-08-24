@@ -10,6 +10,10 @@ Given /^I have the Oni application:$/ do |contents|
   eval contents
 end
 
+Given /^I have the Oni controller:$/ do |contents|
+  eval contents
+end
+
 When /^I visit "([^"]*)"$/ do |path|
   visit path
 end

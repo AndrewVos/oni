@@ -9,7 +9,7 @@ Feature:
 
 
   Scenario: Simple route
-    Given I have the Oni application:
+    Given I have the Oni controller:
     """
     class HomeController < Oni::Controller
       def get
@@ -22,7 +22,7 @@ Feature:
     Then I should see "application response"
 
   Scenario: Routes with named parameters
-    Given I have the Oni application:
+    Given I have the Oni controller:
     """
     class HomeController < Oni::Controller
       def get
