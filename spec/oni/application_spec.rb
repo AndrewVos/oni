@@ -1,8 +1,5 @@
 require "spec_helper"
 
-class ExampleController
-end
-
 module Oni
   describe Application do
     before do
