@@ -6,6 +6,7 @@ require "oni/application"
 require "oni/controller"
 require "oni/routes"
 require "oni/string_route_matcher"
+require "oni/template"
 
 module Oni
 end

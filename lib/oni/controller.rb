@@ -13,5 +13,9 @@ module Oni
         Rack::Response.new([body])
       end
     end
+
+    def render template
+      Template.new(template).render
+    end
   end
 end
