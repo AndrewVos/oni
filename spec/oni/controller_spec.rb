@@ -46,5 +46,16 @@ module Oni
       template.stub!(:render).and_return("rendered template")
       subject.render(:index).should == "rendered template"
     end
+
+    it "passes the binding through to the template" do
+      template = mock(:template)
+      Template.stub!(:new).and_return(template)
+      subject.should_receive(:method1)
+      template.stub!(:render) do |controller_binding|
+        controller_binding.method1
+      end
+      subject.stub!(:method1)
+      subject.render(:index)
+    end
   end
 end

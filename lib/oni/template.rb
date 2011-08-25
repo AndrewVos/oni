@@ -6,9 +6,9 @@ module Oni
       @template = template
     end
 
-    def render
+    def render scope
       file = Dir.glob("views/#{@template}.*").first
-      Tilt.new(file).render
+      Tilt.new(file).render(scope)
     end
   end
 end
