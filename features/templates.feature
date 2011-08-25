@@ -10,7 +10,6 @@ Feature: Templates
 
     class HomeController < Oni::Controller
       def get
-        @value = "the value of value"
         render(:index)
       end
     end
@@ -23,6 +22,13 @@ Feature: Templates
       end
     end
     Oni::Routes.route "/value_controller", ValueReturnerController
+
+    class LayoutlessController < Oni::Controller
+      def get
+        render(:index, :layout => false)
+      end
+    end
+    Oni::Routes.route "/no-layout", LayoutlessController
     """
 
   Scenario: Templates can see the controller binding
@@ -37,6 +43,26 @@ Feature: Templates
     """
     When I visit "/value_controller"
     Then I should see "the value of value"
+
+  Scenario: Template without a layout
+    Given I have the template "layout.haml" with the contents:
+    """
+    %p Template Title
+    = yield
+    """
+    Given I have the template "index.haml" with the contents:
+    """
+    %p Template Content
+    """
+    When I visit "/no-layout"
+    Then I should not see
+    """
+    <p>Template Title</p>
+    """
+    And I should see
+    """
+    <p>Template Content</p>
+    """
 
   Scenario: Haml template
     Given I have the template "layout.haml" with the contents:
