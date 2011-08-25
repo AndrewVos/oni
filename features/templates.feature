@@ -9,14 +9,20 @@ Feature: Templates
     require "haml"
 
     class HomeController < Oni::Controller
-      attr_reader :value
       def get
         @value = "the value of value"
         render(:index)
       end
     end
-
     Oni::Routes.route "/the_request/path", HomeController
+
+    class ValueReturnerController < Oni::Controller
+      attr_reader :value
+      def get
+        @value = "the value of value"
+      end
+    end
+    Oni::Routes.route "/value_controller", ValueReturnerController
     """
 
   Scenario: Templates can see the controller binding
@@ -29,7 +35,7 @@ Feature: Templates
     HAML Template Title
     = value
     """
-    When I visit "/the_request/path"
+    When I visit "/value_controller"
     Then I should see "the value of value"
 
   Scenario: Haml template
