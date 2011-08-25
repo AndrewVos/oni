@@ -14,8 +14,8 @@ module Oni
       end
     end
 
-    def render template
-      Template.new(template).render(self)
+    def render template, options = {}
+      Template.new(template).render(self, options)
     end
   end
 end

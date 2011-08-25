@@ -20,25 +20,48 @@ Feature: Templates
     """
 
   Scenario: Templates can see the controller binding
-    Given I have the template "index.haml" with the contents:
+    Given I have the template "layout.haml" with the contents:
     """
+    = yield
+    """
+    And I have the template "index.haml" with the contents:
+    """
+    HAML Template Title
     = value
     """
     When I visit "/the_request/path"
     Then I should see "the value of value"
 
   Scenario: Haml template
-    Given I have the template "index.haml" with the contents:
+    Given I have the template "layout.haml" with the contents:
+    """
+    %p HAML Template Title
+    = yield
+    """
+    And I have the template "index.haml" with the contents:
     """
     %p Nothing to see here!
     """
     When I visit "/the_request/path"
-    Then I should see "<p>Nothing to see here!</p>"
+    Then I should see
+    """
+    <p>HAML Template Title</p>
+    <p>Nothing to see here!</p>
+    """
 
   Scenario: ERB template
-    Given I have the template "index.erb" with the contents:
+    Given I have the template "layout.erb" with the contents:
+    """
+    ERB Template Title
+    <%= yield %>
+    """
+    And I have the template "index.erb" with the contents:
     """
     Just another <%= "ERB" %> template :/
     """
     When I visit "/the_request/path"
-    Then I should see "Just another ERB template :/"
+    Then I should see
+    """
+    ERB Template Title
+    Just another ERB template :/
+    """

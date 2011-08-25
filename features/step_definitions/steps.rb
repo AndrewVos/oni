@@ -27,6 +27,10 @@ Then /^I should see "([^"]*)"$/ do |text|
   page.body.should include text
 end
 
+Then /^I should see$/ do |text|
+  page.body.should include text
+end
+
 Given /^I have the route "([^"]*)"$/ do |route|
 end
 
