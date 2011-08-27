@@ -9,14 +9,14 @@ module Oni
     def render scope, options = {}
       options = {:layout => true}.merge(options)
 
-      template = Dir.glob("views/#{@template}.*").first
+      template = Dir.glob("templates/#{@template}.*").first
       rendered = Tilt.new(template).render(scope)
 
       if options[:layout] != false
         if options[:layout] == true
-          layout = Dir.glob("views/layout.*").first
+          layout = Dir.glob("templates/layout.*").first
         else
-          layout = Dir.glob("views/#{options[:layout]}.*").first
+          layout = Dir.glob("templates/#{options[:layout]}.*").first
         end
         if layout
           rendered = Tilt.new(layout).render { rendered }

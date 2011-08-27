@@ -4,11 +4,11 @@ Capybara::app = Oni::Application.new
 
 Before do
   Oni::Routes.reset_routes!
-  FileUtils.mkdir_p("views")
+  FileUtils.mkdir_p("templates")
 end
 
 After do
-  FileUtils.rm_rf("views")
+  FileUtils.rm_rf("templates")
 end
 
 Given /^I have the Oni application:$/ do |contents|
@@ -43,7 +43,7 @@ Given /^I have the route "([^"]*)" to the controller "([^"]*)"$/ do |from, to|
 end
 
 Given /^I have the template "([^"]*)" with the contents:$/ do |file, contents|
-  File.open("views/#{file}", "w") do |file|
+  File.open("templates/#{file}", "w") do |file|
     file.write(contents)
   end
 end

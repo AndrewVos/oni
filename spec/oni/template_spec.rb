@@ -1,8 +1,8 @@
 module Oni
   describe Template do
     before do
-      Dir.stub!(:glob).with("views/index.*").and_return ["views/index.haml", "index.erb"]
-      Tilt.stub!(:new).with("views/index.haml").and_return(tilt)
+      Dir.stub!(:glob).with("templates/index.*").and_return ["templates/index.haml", "index.erb"]
+      Tilt.stub!(:new).with("templates/index.haml").and_return(tilt)
     end
 
     let :tilt do
@@ -13,7 +13,7 @@ module Oni
 
     context "without a layout template" do
       before do
-        Dir.stub!(:glob).with("views/layout.*").and_return []
+        Dir.stub!(:glob).with("templates/layout.*").and_return []
       end
 
       it "renders the first template found" do
@@ -29,8 +29,8 @@ module Oni
 
     context "with a layout template" do
       before do
-        Dir.stub!(:glob).with("views/layout.*").and_return ["views/layout.haml"]
-        Tilt.stub!(:new).with("views/layout.haml").and_return(layout_tilt)
+        Dir.stub!(:glob).with("templates/layout.*").and_return ["templates/layout.haml"]
+        Tilt.stub!(:new).with("templates/layout.haml").and_return(layout_tilt)
       end
 
       let :layout_tilt do
@@ -61,8 +61,8 @@ module Oni
 
     context "with a specific layout template" do
       before do
-        Dir.stub!(:glob).with("views/specific_layout.*").and_return ["views/specific_layout.haml"]
-        Tilt.stub!(:new).with("views/specific_layout.haml").and_return(specific_layout)
+        Dir.stub!(:glob).with("templates/specific_layout.*").and_return ["templates/specific_layout.haml"]
+        Tilt.stub!(:new).with("templates/specific_layout.haml").and_return(specific_layout)
       end
 
       let :specific_layout do
