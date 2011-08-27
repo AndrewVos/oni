@@ -29,6 +29,13 @@ Feature: Templates
       end
     end
     Oni::Routes.route "/no-layout", LayoutlessController
+
+    class NonDefaultLayoutController < Oni::Controller
+      def get
+        render(:index, :layout => :"non-default")
+      end
+    end
+    Oni::Routes.route "/non-default-layout", NonDefaultLayoutController
     """
 
   Scenario: Templates can see the controller binding
@@ -50,7 +57,7 @@ Feature: Templates
     %p Template Title
     = yield
     """
-    Given I have the template "index.haml" with the contents:
+    And I have the template "index.haml" with the contents:
     """
     %p Template Content
     """
@@ -62,6 +69,23 @@ Feature: Templates
     And I should see
     """
     <p>Template Content</p>
+    """
+
+  Scenario: Template with non-default layout
+    Given I have the template "non-default.haml" with the contents:
+    """
+    %p Template with non-default layout
+    = yield
+    """
+    And I have the template "index.haml" with the contents:
+    """
+    %p Non-default Template Content
+    """
+    When I visit "/non-default-layout"
+    Then I should see
+    """
+    <p>Template with non-default layout</p>
+    <p>Non-default Template Content</p>
     """
 
   Scenario: Haml template

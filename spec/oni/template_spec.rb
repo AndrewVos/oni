@@ -11,10 +11,11 @@ module Oni
       tilt
     end
 
-    context "wthout a layout template" do
+    context "without a layout template" do
       before do
         Dir.stub!(:glob).with("views/layout.*").and_return []
       end
+
       it "renders the first template found" do
         tilt.stub!(:render).and_return("rendered template")
         Template.new(:index).render(nil).should == "rendered template"
@@ -40,7 +41,7 @@ module Oni
 
       it "renders the template inside the layout template" do
         layout_tilt.should_receive(:render) do |&block|
-          block.call.should == "rendered template"
+        block.call.should == "rendered template"
         end
         Template.new(:index).render(nil)
       end
@@ -55,6 +56,24 @@ module Oni
           layout_tilt.should_not_receive(:render)
           Template.new(:index).render(nil, {:layout => false})
         end
+      end
+    end
+
+    context "with a specific layout template" do
+      before do
+        Dir.stub!(:glob).with("views/specific_layout.*").and_return ["views/specific_layout.haml"]
+        Tilt.stub!(:new).with("views/specific_layout.haml").and_return(specific_layout)
+      end
+
+      let :specific_layout do
+        specific_layout = mock(:specific_layout)
+        specific_layout.stub!(:render)
+        specific_layout
+      end
+
+      it "renders the specific layout template" do
+        specific_layout.should_receive(:render)
+        Template.new(:index).render(nil, {:layout => :specific_layout})
       end
     end
   end
