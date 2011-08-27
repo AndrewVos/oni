@@ -54,7 +54,7 @@ module Oni
         template = mock(:template)
         Template.stub!(:new).and_return(template)
         subject.should_receive(:method1)
-        template.stub!(:render) do |controller_binding|
+        template.stub!(:render) do |controller_binding, options|
           controller_binding.method1
         end
         subject.stub!(:method1)
