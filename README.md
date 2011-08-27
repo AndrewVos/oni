@@ -2,7 +2,7 @@ Oni
 ===
 A small but powerful web framework
 
-[![Build Status](https://secure.travis-ci.org/AndrewVos/oni.png)](https://secure.travis-ci.org/AndrewVos/oni.png)
+[![Build Status](https://secure.travis-ci.org/AndrewVos/oni.png)](http://travis-ci.org/AndrewVos/oni)
 
 Example
 =======
