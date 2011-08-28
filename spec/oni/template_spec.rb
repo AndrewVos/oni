@@ -59,6 +59,11 @@ module Oni
         Template.new(:index).render(nil).body.should == "layout with something inside"
       end
 
+      it "passes the scope through to the layout template" do
+        layout_tilt.should_receive(:render).with("scope")
+        Template.new(:index).render("scope")
+      end
+
       context "with the template option turned off" do
         it "does not render the template inside the layout template" do
           layout_tilt.should_not_receive(:render)

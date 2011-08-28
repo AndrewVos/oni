@@ -20,7 +20,7 @@ module Oni
           layout = Dir.glob("templates/#{options[:layout]}.*").first
         end
         if layout
-          rendered = Tilt.new(layout).render { rendered }
+          rendered = Tilt.new(layout).render(scope) { rendered }
         end
       end
 

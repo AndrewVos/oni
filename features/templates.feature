@@ -19,6 +19,7 @@ Feature: Templates
       attr_reader :value
       def get
         @value = "the value of value"
+        render :index
       end
     end
     Oni::Routes.route "/value_controller", ValueReturnerController
@@ -41,15 +42,19 @@ Feature: Templates
   Scenario: Templates can see the controller binding
     Given I have the template "layout.haml" with the contents:
     """
+    = "The layout can see the controller binding: " + value
     = yield
     """
     And I have the template "index.haml" with the contents:
     """
-    HAML Template Title
-    = value
+    = "And so can the template: " + value
     """
     When I visit "/value_controller"
-    Then I should see "the value of value"
+    Then I should see
+    """
+    The layout can see the controller binding: the value of value
+    And so can the template: the value of value
+    """
 
   Scenario: Template without a layout
     Given I have the template "layout.haml" with the contents:
