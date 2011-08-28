@@ -10,7 +10,8 @@ module Oni
       options = {:layout => true}.merge(options)
 
       template = Dir.glob("templates/#{@template}.*").first
-      rendered = Tilt.new(template).render(scope)
+      template = Tilt.new(template)
+      rendered = template.render(scope)
 
       if options[:layout] != false
         if options[:layout] == true
@@ -23,7 +24,16 @@ module Oni
         end
       end
 
-      rendered
+      content_type = template.class.default_mime_type
+      RenderedTemplate.new(rendered, content_type)
+    end
+  end
+
+  class RenderedTemplate
+    attr_accessor :body, :content_type
+    def initialize body, content_type
+      @body = body
+      @content_type = content_type
     end
   end
 end

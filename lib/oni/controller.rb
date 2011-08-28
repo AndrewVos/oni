@@ -17,7 +17,9 @@ module Oni
     end
 
     def render template, options = {}
-      Template.new(template).render(self, options)
+      rendered_template = Template.new(template).render(self, options)
+      content_type(rendered_template.content_type) if rendered_template.content_type
+      rendered_template.body
     end
 
     def content_type type

@@ -121,3 +121,12 @@ Feature: Templates
     ERB Template Title
     Just another ERB template :/
     """
+
+  Scenario: Sass template
+    Given I have the template "index.sass" with the contents:
+    """
+    #element
+      color: red
+    """
+    When I visit "/the_request/path"
+    Then the content type should be "text/css"
