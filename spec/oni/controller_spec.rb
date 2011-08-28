@@ -22,7 +22,7 @@ module Oni
 
       it "wraps the response from the request method" do
         subject.should_receive(:get).and_return "some funky html and stuff"
-        response = mock(:response)
+        response = mock(:response).as_null_object
         Rack::Response.should_receive(:new).with(["some funky html and stuff"]).and_return(response)
         subject.process(request).should == response
       end
@@ -68,6 +68,14 @@ module Oni
           options.should == {:layout => false}
         end
         subject.render(:index, :layout => false)
+      end
+    end
+
+    describe ".content_type" do
+      it "sets the content type" do
+        subject.content_type(".css")
+        subject.stub!(:get)
+        subject.process(request)["Content-Type"].should == "text/css"
       end
     end
   end

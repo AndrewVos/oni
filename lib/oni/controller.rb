@@ -10,12 +10,18 @@ module Oni
 
       if REQUEST_METHODS.include?(request.request_method)
         body = send(request.request_method.downcase.to_sym)
-        Rack::Response.new([body])
+        response = Rack::Response.new([body])
+        response["Content-Type"] = @content_type
+        response
       end
     end
 
     def render template, options = {}
       Template.new(template).render(self, options)
+    end
+
+    def content_type type
+      @content_type = Rack::Mime.mime_type(type, nil)
     end
   end
 end

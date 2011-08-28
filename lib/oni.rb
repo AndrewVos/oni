@@ -5,8 +5,10 @@ require "oni/version"
 require "oni/application"
 require "oni/controller"
 require "oni/routes"
-require "oni/string_route_matcher"
 require "oni/template"
+require "oni/string_route_matcher"
+require "oni/static_file_route_matcher"
+require "oni/static_file_controller"
 
 module Oni
 end

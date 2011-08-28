@@ -15,10 +15,9 @@ module Oni
       end
 
       def process request
-        routes.each do |from, to|
-          if StringRouteMatcher.new(from, request).match?
-            return to.new.process(request)
-          end
+        [StringRouteMatcher, StaticFileRouteMatcher].each do |matcher_class|
+          response = matcher_class.new(request).match?
+          return response if response
         end
         Rack::Response.new([], 404)
       end
