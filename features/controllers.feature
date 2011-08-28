@@ -22,6 +22,21 @@ Feature: Controllers
     """
     class HomeController < Oni::Controller
       def get
+        content_type "monkeys"
+        "content"
+      end
+    end
+
+    Oni::Routes.route "/the_request/path", HomeController
+    """
+    When I visit "/the_request/path"
+    Then the content type should be "monkeys"
+
+  Scenario: Controller can set the content type using an extension
+    Given I have the Oni application:
+    """
+    class HomeController < Oni::Controller
+      def get
         content_type ".css"
         "content"
       end

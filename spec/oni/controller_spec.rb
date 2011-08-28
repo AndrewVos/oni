@@ -72,10 +72,20 @@ module Oni
     end
 
     describe ".content_type" do
-      it "sets the content type" do
-        subject.content_type(".css")
-        subject.stub!(:get)
-        subject.process(request)["Content-Type"].should == "text/css"
+      context "with a file extension" do
+        it "sets the content type" do
+          subject.content_type(".css")
+          subject.stub!(:get)
+          subject.process(request)["Content-Type"].should == "text/css"
+        end
+      end
+
+      context "with a content type" do
+        it "sets the content type" do
+          subject.content_type("text/xml")
+          subject.stub!(:get)
+          subject.process(request)["Content-Type"].should == "text/xml"
+        end
       end
     end
   end

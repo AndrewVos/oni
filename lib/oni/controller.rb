@@ -21,7 +21,8 @@ module Oni
     end
 
     def content_type type
-      @content_type = Rack::Mime.mime_type(type, nil)
+      @content_type = type
+      @content_type = Rack::Mime.mime_type(type, nil) if type.start_with? '.'
     end
   end
 end
