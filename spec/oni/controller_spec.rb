@@ -40,6 +40,11 @@ module Oni
         subject.process(request)
         subject.request.should == request
       end
+
+      it "returns the default content type" do
+        subject.stub!(:get)
+        subject.process(request)["Content-Type"].should == "text/html"
+      end
     end
 
     describe ".render" do

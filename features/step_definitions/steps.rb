@@ -1,5 +1,6 @@
 require "tempfile"
 
+ENV["RACK_ENV"] = "test"
 Capybara::app = Oni::Application.new
 
 Before do

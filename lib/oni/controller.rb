@@ -11,7 +11,7 @@ module Oni
       if REQUEST_METHODS.include?(request.request_method)
         body = send(request.request_method.downcase.to_sym)
         response = Rack::Response.new([body])
-        response["Content-Type"] = @content_type
+        response["Content-Type"] = @content_type if @content_type
         response
       end
     end
