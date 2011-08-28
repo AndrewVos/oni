@@ -1,7 +1,7 @@
 require "spec_helper"
 
 module Oni
-  describe StringRouteMatcher do
+  describe StringRouteProcessor do
     before do
       Routes.reset_routes!
     end
@@ -27,7 +27,7 @@ module Oni
     end
 
     context "simple routes" do
-      subject {StringRouteMatcher.new(request)}
+      subject {StringRouteProcessor.new(request)}
 
       before do
         Routes.route "/route", nil
@@ -35,43 +35,43 @@ module Oni
         request.stub!(:path).and_return("/route/bleh")
       end
 
-      it "matches simple routes" do
-        subject.match?.should == "controller response"
+      it "processes simple routes" do
+        subject.process?.should == "controller response"
       end
 
       it "passes the request on to the controller" do
         controller.should_receive(:process).with(request)
-        subject.match?
+        subject.process?
       end
 
       it "returns the response from the controller" do
-        subject.match?.should == "controller response"
+        subject.process?.should == "controller response"
       end
     end
 
     context "different routes" do
-      subject {StringRouteMatcher.new(request)}
+      subject {StringRouteProcessor.new(request)}
 
-      it "doesn't match routes that are different" do
+      it "doesn't process routes that are different" do
         request.stub!(:path).and_return("/")
-        subject.match?.should == false
+        subject.process?.should == false
       end
     end
 
     context "routes with parameters" do
-      subject {StringRouteMatcher.new(request)}
+      subject {StringRouteProcessor.new(request)}
       before { Routes.route "/:param1/ignore/:param2/another", controller }
 
-      it "matches routes with parameters" do
+      it "processes routes with parameters" do
         request.stub!(:path).and_return("/value1/ignore/value2/another")
-        subject.match?.should == "controller response"
+        subject.process?.should == "controller response"
       end
 
-      it "adds the matched parameters to the request" do
+      it "adds the processed parameters to the request" do
         request.stub!(:path).and_return("/value1/ignore/value2/another")
         params.should_receive(:[]=).with(:param1, "value1")
         params.should_receive(:[]=).with(:param2, "value2")
-        subject.match?
+        subject.process?
       end
     end
   end

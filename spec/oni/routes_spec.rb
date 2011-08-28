@@ -19,9 +19,9 @@ module Oni
     end
 
     describe ".process" do
-      [StringRouteMatcher, StaticFileRouteMatcher].each do |route_matcher_class|
+      [StringRouteProcessor, StaticFileRouteProcessor].each do |route_processor_class|
         before do
-          route_matcher_class.stub!(:new).and_return(route_matcher)
+          route_processor_class.stub!(:new).and_return(route_processor)
         end
 
         let :request do
@@ -32,26 +32,26 @@ module Oni
           request
         end
 
-        let :route_matcher do
-          route_matcher = stub(:route_matcher)
-          route_matcher.stub!(:match?).and_return(false)
-          route_matcher
+        let :route_processor do
+          route_processor = stub(:route_processor)
+          route_processor.stub!(:process?).and_return(false)
+          route_processor
         end
 
-        it "creates a route matcher with the request" do
-          route_matcher_class.should_receive(:new).with(request)
+        it "creates a route processor with the request" do
+          route_processor_class.should_receive(:new).with(request)
           subject.process(request)
         end
 
-        context "route that doesn't match" do
+        context "route that doesn't get processed" do
           it "returns a 404" do
             subject.process(request).status.should == 404
           end
         end
 
-        context "route that matches" do
+        context "route that gets processed" do
           it "returns the response" do
-            route_matcher.should_receive(:match?).and_return("response")
+            route_processor.should_receive(:process?).and_return("response")
             subject.process(request).should == "response"
           end
         end

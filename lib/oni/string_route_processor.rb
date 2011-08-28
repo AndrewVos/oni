@@ -1,12 +1,12 @@
 module Oni
-  class StringRouteMatcher
+  class StringRouteProcessor
     def initialize request
       @request = request
     end
 
-    def match?
+    def process?
       Routes.routes.each do |route, controller|
-        if try_match? route, controller
+        if try_process? route, controller
           return controller.new.process(@request)
         end
       end
@@ -16,7 +16,7 @@ module Oni
 
     private
 
-    def try_match? route, controller
+    def try_process? route, controller
       route_parts = route.split("/")
       request_parts = @request.path.split("/")
       return false if route_parts.size != request_parts.size

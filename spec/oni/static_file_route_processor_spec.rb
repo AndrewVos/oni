@@ -1,8 +1,8 @@
 require "spec_helper"
 
 module Oni
-  describe StaticFileRouteMatcher do
-    subject { StaticFileRouteMatcher.new(request) }
+  describe StaticFileRouteProcessor do
+    subject { StaticFileRouteProcessor.new(request) }
 
     before do
       StaticFileController.stub!(:new).and_return(controller)
@@ -22,7 +22,7 @@ module Oni
         File.stub!(:exist?).with(File.expand_path("public/main.css")).and_return(true)
         File.stub!(:read).with(File.expand_path("public/main.css")).and_return "file contents"
         controller.should_receive(:process).with(request)
-        subject.match?
+        subject.process?
       end
 
       it "returns the response of the controller" do
@@ -30,14 +30,14 @@ module Oni
         File.stub!(:exist?).with(File.expand_path("public/main.css")).and_return(true)
         File.stub!(:read).with(File.expand_path("public/main.css")).and_return "file contents"
         controller.stub!(:process).and_return("hello")
-        subject.match?.should == "hello"
+        subject.process?.should == "hello"
       end
 
       it "only returns files that are descendants of public/" do
         request.stub!(:path).and_return("/../file.txt")
         File.stub!(:exist?).with(File.expand_path("public/../file.txt")).and_return(true)
         File.stub!(:read).and_return("file contents")
-        subject.match?.should_not == "file contents"
+        subject.process?.should_not == "file contents"
       end
     end
 
@@ -45,7 +45,7 @@ module Oni
       it "returns false" do
         request.stub!(:path).and_return("/main.css")
         File.stub!(:exist?).with(File.expand_path("public/main.css")).and_return(false)
-        subject.match?.should == false
+        subject.process?.should == false
       end
     end
   end
