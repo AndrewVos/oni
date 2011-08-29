@@ -80,7 +80,7 @@ Templates
 =========
 Templates can be in any format supported by [Tilt](https://github.com/rtomayko/tilt). Template type is worked out by the file name.
 
-The following code will attempt to render the template "templates/index".
+The following code will attempt to render the template ```templates/index```.
 
 ```ruby
 def get
@@ -88,7 +88,7 @@ def get
 end
 ```
 
-The first layout file found will be used. In the example below, if there is a template named "layout.haml" then it will be used.
+The first layout file found will be used. In the example below, if there is a template named ```layout.haml``` then it will be used.
 
 ```ruby
 render :index
