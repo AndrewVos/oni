@@ -127,4 +127,6 @@ end
 
 Public Files
 ============
-Any files in the directory ```public``` will be served automatically. If we have a file called ```main.css``` in the directory public then any requests to ```/main.css``` will be responded to with that file. The mime type will be worked out automatically by file extension.
+Any files in the directory ```public``` will be served automatically. For example if we have a file called ```main.css``` in the ```public``` directory then any requests to ```/main.css``` will be responded to with that file.
+
+The mime type will be worked out automatically by file extension.
