@@ -49,6 +49,33 @@ content_type ".css"
 content_type "text/css"
 ```
 
+Routes
+======
+We use routes to point to our controllers. Routes are defined using the Oni::Routes class.
+Simple routes
+-------------
+```ruby
+Oni::Routes.route "/a/path/name", Example1Controller
+Oni::Routes.route "/a/diferent/name", Example2Controller
+```
+
+Routes with named parameters
+----------------------------
+Named parameters can be used and can be accessed from the params hash in the controller.
+
+```ruby
+Oni::Routes.route "/route1/:parameter1/:parameter2/hello", Example1Controller
+```
+
+```ruby
+class Example1Controller < Oni::Controller
+  def get
+    params[:parameter1]
+    params[:parameter2]
+  end
+end
+```
+
 Templates
 =========
 Templates can be in any format supported by [Tilt](https://github.com/rtomayko/tilt). Template type is worked out by the file name.
