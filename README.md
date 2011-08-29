@@ -16,6 +16,23 @@ end
 Oni::Routes.route "/", HomeController
 ```
 
+Controllers
+===========
+Oni controllers must inherit from the Oni::Controller class.
+
+Controller Helpers
+------------------
+### content_type
+To set the content type header call ```content_type``` with either a file extension or the actual content type.
+
+```ruby
+content_type ".css"
+```
+
+```ruby
+content_type "text/css"
+```
+
 Templates
 =========
 Templates can be in any format supported by [Tilt](https://github.com/rtomayko/tilt). Template type is worked out by the file name.
