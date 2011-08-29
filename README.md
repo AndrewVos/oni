@@ -18,10 +18,26 @@ Oni::Routes.route "/", HomeController
 
 Controllers
 ===========
-Oni controllers must inherit from the Oni::Controller class.
+Oni controllers must inherit from the Oni::Controller class. We define each controller request method using the actual request method name.
+
+The controller in the example below supports both ```get``` and ```post``` methods.
+
+```ruby
+class HomeController < Oni::Controller
+  def get
+    render :index
+  end
+
+  def post
+    render :index
+  end
+end
+```
 
 Controller Helpers
 ------------------
+Some useful helpers available to controllers are listed below.
+
 ### content_type
 To set the content type header call ```content_type``` with either a file extension or the actual content type.
 
