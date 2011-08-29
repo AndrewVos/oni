@@ -52,6 +52,7 @@ content_type "text/css"
 Routes
 ======
 We use routes to point to our controllers. Routes are defined using the Oni::Routes class.
+
 Simple routes
 -------------
 ```ruby
@@ -123,3 +124,7 @@ end
 ```haml
 %p= get_some_data
 ```
+
+Public Files
+============
+Any files in the directory ```public``` will be served automatically. If we have a file called ```main.css``` in the directory public then any requests to ```/main.css``` will be responded to with that file. The mime type will be worked out automatically by file extension.
