@@ -81,7 +81,7 @@ Templates
 =========
 Templates can be in any format supported by [Tilt](https://github.com/rtomayko/tilt). Template type is worked out by the file name.
 
-The following code will attempt to render the template ```templates/index```.
+The following code will attempt to render the template ```templates/index.*```
 
 ```ruby
 def get
